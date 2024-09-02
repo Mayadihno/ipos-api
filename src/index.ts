@@ -1,5 +1,6 @@
 import express from "express";
 import customerRouter from "./routes/customer";
+import userRouter from "./routes/users";
 
 require("dotenv").config();
 const cors = require("cors");
@@ -16,3 +17,4 @@ app.listen(PORT, () => {
 });
 
 app.use("/api/v1", customerRouter);
+app.use("/api/v1", userRouter);

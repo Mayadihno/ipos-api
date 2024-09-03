@@ -62,6 +62,7 @@ model Supplier {
   phone             String       @unique
   createdAt         DateTime     @default(now())
   updatedAt         DateTime     @updatedAt
+  Product           Product[]
 }
 
 enum SupplierType {
@@ -109,4 +110,60 @@ model Shop {
   adminId       String   @db.ObjectId
   admin         User     @relation(fields: [adminId], references: [id])
   attendantsIds String[] @db.ObjectId
+}
+
+model Unit {
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  abbreviation String
+  slug         String    @unique
+  products     Product[]
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+model Brand {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  slug      String    @unique
+  products  Product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Category {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  slug      String    @unique
+  products  Product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Product {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String?
+  expiryDate  DateTime
+  batchNumber String?
+  barCode     String?   @unique
+  image       String?
+  alertQty    Int
+  tax         Int?
+  stockQty    Int
+  price       Int
+  buyingPrice Int?
+  sku         String    @unique
+  productCode String    @unique
+  slug        String    @unique
+  supplierId  String    @db.ObjectId
+  supplier    Supplier  @relation(fields: [supplierId], references: [id])
+  Unit        Unit?     @relation(fields: [unitId], references: [id])
+  unitId      String?   @db.ObjectId
+  Brand       Brand?    @relation(fields: [brandId], references: [id])
+  brandId     String?   @db.ObjectId
+  Category    Category? @relation(fields: [categoryId], references: [id])
+  categoryId  String?   @db.ObjectId
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }

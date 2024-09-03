@@ -17,12 +17,59 @@ datasource db {
 }
 
 model Customer {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  email     String   @unique
-  name      String
-  phone     String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id             String       @id @default(auto()) @map("_id") @db.ObjectId
+  email          String?      @unique
+  customerType   CustomerType
+  firstName      String
+  lastName       String
+  gender         Gender
+  maxCreditLimit Float
+  maxCreditDays  Int
+  taxPin         String?
+  dob            DateTime?
+  nin            String?      @unique
+  country        String
+  location       String
+  phone          String       @unique
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+}
+
+enum CustomerType {
+  RETAIL
+  WHOLESALE
+  DISTRIBUTOR
+  OTHER
+}
+
+model Supplier {
+  id                String       @id @default(auto()) @map("_id") @db.ObjectId
+  email             String?      @unique
+  name              String
+  supplierType      SupplierType
+  contactPerson     String
+  website           String?
+  taxPin            String?
+  country           String
+  location          String
+  notes             String?
+  rating            Float?
+  logo              String?      @default("https://imgs.search.brave.com/sVrBjra-WLtml3sniXKBwSe7fQ3sJyKHHqw7lRl6D8o/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jbGlw/YXJ0LWxpYnJhcnku/Y29tL25ld19nYWxs/ZXJ5LzMtMzc0NTBf/bG9nby1mcmVlLWlj/b25zLWltYWdlcy1w/bmcucG5n")
+  paymentTerms      String?
+  bankName          String?
+  bankAccountNumber String?
+  regNumber         String?      @unique
+  phone             String       @unique
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+}
+
+enum SupplierType {
+  MANUFACTURER
+  WHOLESALER
+  DISTRIBUTOR
+  RETAILER
+  OTHER
 }
 
 model User {

@@ -134,6 +134,42 @@ export async function updateUser(req: Request, res: Response) {
       return ErrorMessage(res, 404, "User not found");
     }
 
+    if (email && email !== user.email) {
+      const emailExist = await db.user.findUnique({
+        where: {
+          email,
+        },
+      });
+
+      if (emailExist) {
+        return ErrorMessage(res, 409, `Email ${email} already exist`);
+      }
+    }
+
+    if (username && username !== user.username) {
+      const usernameExist = await db.user.findUnique({
+        where: {
+          username,
+        },
+      });
+
+      if (usernameExist) {
+        return ErrorMessage(res, 409, `Username ${username} already exist`);
+      }
+    }
+
+    if (phone && phone !== user.phone) {
+      const phoneExist = await db.user.findUnique({
+        where: {
+          phone,
+        },
+      });
+
+      if (phoneExist) {
+        return ErrorMessage(res, 409, `Phone Number ${phone} already exist`);
+      }
+    }
+
     const updatedUser = await db.user.update({
       where: {
         id,

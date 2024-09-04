@@ -8,8 +8,8 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    // "rootDir": "./src",
-    "outDir": "./dist",
+    "rootDir": "./src",
+    "outDir": "./src/dist",
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]

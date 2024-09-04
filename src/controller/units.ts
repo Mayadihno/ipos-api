@@ -43,7 +43,7 @@ export async function getUnits(req: Request, res: Response) {
 }
 
 export async function getUnitById(req: Request, res: Response) {
-  const { id } = req.body;
+  const { id } = req.params;
   try {
     const unit = await db.unit.findUnique({
       where: {
@@ -80,7 +80,7 @@ export async function updateUnit(req: Request, res: Response) {
         },
       });
       if (slugExist) {
-        return ErrorMessage(res, 409, `Unit ${name} Already Exists`);
+        return ErrorMessage(res, 409, `Unit ${slug} Already Exists`);
       }
     }
 

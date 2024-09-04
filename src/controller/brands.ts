@@ -42,7 +42,7 @@ export async function getBrands(req: Request, res: Response) {
 }
 
 export async function getBrandById(req: Request, res: Response) {
-  const { id } = req.body;
+  const { id } = req.params;
   try {
     const brand = await db.brand.findUnique({
       where: {
@@ -79,7 +79,7 @@ export async function updateBrand(req: Request, res: Response) {
         },
       });
       if (slugExist) {
-        return ErrorMessage(res, 409, `Brand ${name} Already Exists`);
+        return ErrorMessage(res, 409, `Brand ${slug} Already Exists`);
       }
     }
 

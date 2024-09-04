@@ -42,7 +42,7 @@ export async function getCategoriess(req: Request, res: Response) {
 }
 
 export async function getCategoriesById(req: Request, res: Response) {
-  const { id } = req.body;
+  const { id } = req.params;
   try {
     const categories = await db.category.findUnique({
       where: {
@@ -79,7 +79,7 @@ export async function updateCategories(req: Request, res: Response) {
         },
       });
       if (slugExist) {
-        return ErrorMessage(res, 409, `Category ${name} Already Exists`);
+        return ErrorMessage(res, 409, `Category ${slug} Already Exists`);
       }
     }
 

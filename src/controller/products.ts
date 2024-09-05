@@ -23,6 +23,8 @@ export async function createProduct(req: Request, res: Response) {
     brandId,
     categoryId,
     unitId,
+    wholesaleprice,
+    shopId,
   } = req.body;
 
   try {
@@ -87,6 +89,8 @@ export async function createProduct(req: Request, res: Response) {
         brandId,
         categoryId,
         unitId,
+        wholesaleprice,
+        shopId,
       },
     });
 
@@ -171,6 +175,8 @@ export async function updateProduct(req: Request, res: Response) {
     brandId,
     categoryId,
     unitId,
+    wholesaleprice,
+    shopId,
   } = req.body;
   try {
     const product = await db.product.findUnique({
@@ -251,6 +257,8 @@ export async function updateProduct(req: Request, res: Response) {
         brandId,
         categoryId,
         unitId,
+        wholesaleprice,
+        shopId,
       },
     });
 

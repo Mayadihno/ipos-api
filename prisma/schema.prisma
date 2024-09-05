@@ -25,7 +25,7 @@ model Customer {
   gender             Gender
   maxCreditLimit     Float
   maxCreditDays      Int
-  unPaidCreditAmount Int?         @default(0)
+  unPaidCreditAmount Int          @default(0)
   taxPin             String?
   dob                DateTime?
   nin                String?      @unique
@@ -117,6 +117,7 @@ model Shop {
   admin         User      @relation(fields: [adminId], references: [id])
   attendantsIds String[]  @db.ObjectId
   Product       Product[]
+  sale          Sale[]
 }
 
 model Unit {
@@ -194,10 +195,14 @@ model Sale {
   paymentMethod   PaymentMethod @default(MOBILEMONEY)
   transactionCode String?
   salesItem       SaleItem[]
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
+
+  shopId String @db.ObjectId
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   customer Customer @relation(fields: [customerId], references: [id])
+  Shop     Shop     @relation(fields: [shopId], references: [id])
 }
 
 enum PaymentMethod {

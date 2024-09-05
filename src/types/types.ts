@@ -11,6 +11,7 @@ export interface SalesRequestBody {
   saleType: PaymentStatus;
   paymentMethod: PaymentMethod;
   transactionCode: string;
+  shopId: string;
   salesItem: SalesItem[];
 }
 

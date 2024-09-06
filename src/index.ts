@@ -1,3 +1,4 @@
+import { rateLimit } from "express-rate-limit";
 import express from "express";
 import customerRouter from "./routes/customer";
 import userRouter from "./routes/users";
@@ -12,12 +13,44 @@ import salesRouter from "./routes/sales";
 import payeeRouter from "./routes/payee";
 import expenseRouter from "./routes/expense";
 import expenseCategoriesRouter from "./routes/expenseCategories";
+import { ErrorMessage } from "./utils/ErrorMessage";
 
 require("dotenv").config();
 const cors = require("cors");
 const app = express();
 
 app.use(cors());
+
+// Configure general rate limiter
+const generalLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per windowMs
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+  handler: (req, res) => {
+    return ErrorMessage(res, 429, "Too many requests, please try again later");
+  },
+});
+
+// Apply general rate limiter to all requests
+app.use(generalLimiter);
+
+// Configure stricter rate limiter for sensitive operations
+const strictLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 50, // Limit each IP to 50 requests per windowMs
+  standardHeaders: true,
+  legacyHeaders: false,
+  handler: (req, res) => {
+    return ErrorMessage(res, 429, "Too many requests, please try again later");
+  },
+});
+
+// Apply stricter rate limit to sensitive routes
+app.use("/api/v1/sales", strictLimiter);
+app.use("/api/v1/user", strictLimiter);
+app.use("/api/v1/auth", strictLimiter);
+app.use("/api/v1/expense", strictLimiter);
 
 const PORT = process.env.PORT || 8000;
 

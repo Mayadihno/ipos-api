@@ -45,8 +45,8 @@ enum CustomerType {
 }
 
 model Supplier {
-  id                String       @id @default(auto()) @map("_id") @db.ObjectId
-  email             String?      @unique
+  id                String          @id @default(auto()) @map("_id") @db.ObjectId
+  email             String?         @unique
   name              String
   supplierType      SupplierType
   contactPerson     String
@@ -56,15 +56,16 @@ model Supplier {
   location          String
   notes             String?
   rating            Float?
-  logo              String?      @default("https://imgs.search.brave.com/sVrBjra-WLtml3sniXKBwSe7fQ3sJyKHHqw7lRl6D8o/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jbGlw/YXJ0LWxpYnJhcnku/Y29tL25ld19nYWxs/ZXJ5LzMtMzc0NTBf/bG9nby1mcmVlLWlj/b25zLWltYWdlcy1w/bmcucG5n")
+  logo              String?         @default("https://imgs.search.brave.com/sVrBjra-WLtml3sniXKBwSe7fQ3sJyKHHqw7lRl6D8o/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jbGlw/YXJ0LWxpYnJhcnku/Y29tL25ld19nYWxs/ZXJ5LzMtMzc0NTBf/bG9nby1mcmVlLWlj/b25zLWltYWdlcy1w/bmcucG5n")
   paymentTerms      String?
   bankName          String?
   bankAccountNumber String?
-  regNumber         String?      @unique
-  phone             String       @unique
-  createdAt         DateTime     @default(now())
-  updatedAt         DateTime     @updatedAt
+  regNumber         String?         @unique
+  phone             String          @unique
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
   Product           Product[]
+  PurchaseOrder     PurchaseOrder[]
 }
 
 enum SupplierType {
@@ -179,7 +180,9 @@ model Product {
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
 
-  SaleItem SaleItem[]
+  SaleItem           SaleItem[]
+  AdjustmentItems    AdjustmentItems[]
+  PurchaseOrderItems PurchaseOrderItems[]
 }
 
 model Sale {
@@ -280,4 +283,81 @@ model Expenses {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Notification {
+  id         String             @id @default(auto()) @map("_id") @db.ObjectId
+  message    String
+  status     NotificationStatus @default(WARNING)
+  statusText String
+  read       Boolean            @default(false)
+  createdAt  DateTime           @default(now())
+  updatedAt  DateTime           @updatedAt
+}
+
+enum NotificationStatus {
+  WARNING
+  DANGER
+  INFO
+}
+
+model Adjustment {
+  id        String            @id @default(auto()) @map("_id") @db.ObjectId
+  refNo     String            @unique @default("AAAAB")
+  reason    String
+  items     AdjustmentItems[]
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+}
+
+model AdjustmentItems {
+  id           String     @id @default(auto()) @map("_id") @db.ObjectId
+  adjustmentId String     @db.ObjectId
+  adjustment   Adjustment @relation(fields: [adjustmentId], references: [id])
+  productId    String     @db.ObjectId
+  product      Product    @relation(fields: [productId], references: [id])
+  quantity     Int
+  type         String
+  currentStock String
+  productName  String
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
+
+model PurchaseOrder {
+  id            String               @id @default(auto()) @map("_id") @db.ObjectId
+  supplierId    String               @db.ObjectId
+  supplier      Supplier             @relation(fields: [supplierId], references: [id])
+  discount      Int?
+  notes         String?
+  tax           Int?
+  refNo         String
+  totalAmount   Int
+  balanceAmount Int
+  shippingCost  Int?
+  items         PurchaseOrderItems[]
+  status        PurchaseOrderStatus  @default(PAID)
+  createdAt     DateTime             @default(now())
+  updatedAt     DateTime             @updatedAt
+}
+
+enum PurchaseOrderStatus {
+  PAID
+  PARTIAL
+  UNPAID
+}
+
+model PurchaseOrderItems {
+  id              String        @id @default(auto()) @map("_id") @db.ObjectId
+  purchaseOrderId String        @db.ObjectId
+  purchaseOrder   PurchaseOrder @relation(fields: [purchaseOrderId], references: [id])
+  productId       String        @db.ObjectId
+  product         Product       @relation(fields: [productId], references: [id])
+  quantity        Int
+  productName     String
+  unitCost        Int
+  subTotal        Int
+  currentStock    Int
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
 }

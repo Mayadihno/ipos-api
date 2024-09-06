@@ -14,6 +14,9 @@ import payeeRouter from "./routes/payee";
 import expenseRouter from "./routes/expense";
 import expenseCategoriesRouter from "./routes/expenseCategories";
 import { ErrorMessage } from "./utils/ErrorMessage";
+import notificationRouter from "./routes/notification";
+import adjustmentRouter from "./routes/adjustments";
+import purchaseOrderRouter from "./routes/purchaseOrder";
 
 require("dotenv").config();
 const cors = require("cors");
@@ -73,3 +76,6 @@ app.use("/api/v1", salesRouter);
 app.use("/api/v1", payeeRouter);
 app.use("/api/v1", expenseRouter);
 app.use("/api/v1", expenseCategoriesRouter);
+app.use("/api/v1", notificationRouter);
+app.use("/api/v1", adjustmentRouter);
+app.use("api/v1", purchaseOrderRouter);

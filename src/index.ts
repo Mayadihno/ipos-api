@@ -9,6 +9,9 @@ import brandRouter from "./routes/brands";
 import unitRouter from "./routes/units";
 import categoryRouter from "./routes/category";
 import salesRouter from "./routes/sales";
+import payeeRouter from "./routes/payee";
+import expenseRouter from "./routes/expense";
+import expenseCategoriesRouter from "./routes/expenseCategories";
 
 require("dotenv").config();
 const cors = require("cors");
@@ -34,3 +37,6 @@ app.use("/api/v1", brandRouter);
 app.use("/api/v1", unitRouter);
 app.use("/api/v1", categoryRouter);
 app.use("/api/v1", salesRouter);
+app.use("/api/v1", payeeRouter);
+app.use("/api/v1", expenseRouter);
+app.use("/api/v1", expenseCategoriesRouter);

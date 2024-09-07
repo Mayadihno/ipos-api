@@ -48,13 +48,13 @@ export async function loginUser(req: Request, res: Response) {
     const accessToken = generateAccessToken(usersData);
     const refreshToken = generateAccessToken(usersData);
     const accessTokenCookieOptions: CookieOptions = {
-      expires: new Date(Date.now() + 60 * 60 * 1000), // 1 hour
+      maxAge: 2 * 60 * 60 * 1000, // 2 hour
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
     };
     const refreshTokenCookieOptions: CookieOptions = {
-      expires: new Date(Date.now() + 2 * 60 * 60 * 1000), // 2 hours
+      maxAge: 3 * 60 * 60 * 1000, // 3 hours
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",

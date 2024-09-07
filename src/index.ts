@@ -1,5 +1,6 @@
 import { rateLimit } from "express-rate-limit";
 import express from "express";
+import cookieParser from "cookie-parser";
 import customerRouter from "./routes/customer";
 import userRouter from "./routes/users";
 import shopRouter from "./routes/shops";
@@ -23,6 +24,7 @@ const cors = require("cors");
 const app = express();
 
 app.use(cors());
+app.use(cookieParser());
 
 // Configure general rate limiter
 const generalLimiter = rateLimit({

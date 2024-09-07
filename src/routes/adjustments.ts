@@ -5,14 +5,15 @@ import {
   getAdjustments,
   updateAdjustment,
 } from "@/controller/adjustment";
+import { verifyUser } from "@/utils/verify-user";
 import express from "express";
 
 const adjustmentRouter = express.Router();
 
-adjustmentRouter.post("/create-adjustment", createAdjustment);
-adjustmentRouter.get("/adjustment", getAdjustments);
-adjustmentRouter.get("/adjustment/:id", getAdjustment);
-adjustmentRouter.put("/update-adjustment/:id", updateAdjustment);
-adjustmentRouter.delete("/delete-adjustment/:id", deleteAdjustment);
+adjustmentRouter.post("/create-adjustment", verifyUser, createAdjustment);
+adjustmentRouter.get("/adjustment", verifyUser, getAdjustments);
+adjustmentRouter.get("/adjustment/:id", verifyUser, getAdjustment);
+adjustmentRouter.put("/update-adjustment/:id", verifyUser, updateAdjustment);
+adjustmentRouter.delete("/delete-adjustment/:id", verifyUser, deleteAdjustment);
 
 export default adjustmentRouter;

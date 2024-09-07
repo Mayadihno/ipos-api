@@ -1,6 +1,6 @@
 import { db } from "@/db/db";
 import { ErrorMessage } from "@/utils/ErrorMessage";
-import { Request, Response } from "express";
+import { CookieOptions, Request, Response } from "express";
 import bcrypt from "bcrypt";
 import { User } from "@prisma/client";
 import { generateAccessToken } from "@/utils/generateJWT";
@@ -44,8 +44,27 @@ export async function loginUser(req: Request, res: Response) {
     }
 
     const { password: savedPassword, ...usersData } = existingUser as User;
+
     const accessToken = generateAccessToken(usersData);
-    res.status(200).json({ data: { usersData, accessToken } });
+    const refreshToken = generateAccessToken(usersData);
+    const accessTokenCookieOptions: CookieOptions = {
+      expires: new Date(Date.now() + 60 * 60 * 1000), // 1 hour
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+    };
+    const refreshTokenCookieOptions: CookieOptions = {
+      expires: new Date(Date.now() + 2 * 60 * 60 * 1000), // 2 hours
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+    };
+
+    res.cookie("sessionToken", accessToken, accessTokenCookieOptions);
+    res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions);
+    res
+      .status(200)
+      .json({ message: "Login successful", user: usersData, accessToken });
   } catch (error) {
     return ErrorMessage(res, 500, "Internal Server error");
   }

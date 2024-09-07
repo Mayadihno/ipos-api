@@ -5,14 +5,15 @@ import {
   getSingleExpense,
   updateExpense,
 } from "@/controller/expense";
+import { verifyUser } from "@/utils/verify-user";
 import express from "express";
 
 const expenseRouter = express.Router();
 
-expenseRouter.post("/create-expense", createExpense);
-expenseRouter.get("/expenses", getExpenses);
-expenseRouter.get("/expense/:id", getSingleExpense);
-expenseRouter.put("/update-expense/:id", updateExpense);
-expenseRouter.delete("/expense/:id", deleteExpense);
+expenseRouter.post("/create-expense", verifyUser, createExpense);
+expenseRouter.get("/expenses", verifyUser, getExpenses);
+expenseRouter.get("/expense/:id", verifyUser, getSingleExpense);
+expenseRouter.put("/update-expense/:id", verifyUser, updateExpense);
+expenseRouter.delete("/expense/:id", verifyUser, deleteExpense);
 
 export default expenseRouter;
